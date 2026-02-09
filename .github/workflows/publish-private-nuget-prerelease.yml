@@ -45,6 +45,14 @@ jobs:
         if: steps.release-tag-check.outputs.skip_publish != 'true'
         run: dotnet restore Identity.DynamoDb.sln
 
+      - name: Build
+        if: steps.release-tag-check.outputs.skip_publish != 'true'
+        run: >
+          dotnet build src/Identity.DynamoDb/Identity.DynamoDb.csproj
+          -c Release
+          --no-restore
+          -p:GeneratePackageOnBuild=false
+
       - name: Pack prerelease
         if: steps.release-tag-check.outputs.skip_publish != 'true'
         shell: bash
@@ -60,7 +68,10 @@ jobs:
 
           dotnet pack src/Identity.DynamoDb/Identity.DynamoDb.csproj \
             -c Release \
+            --no-build \
+            --no-restore \
             -p:PackageVersion="$VERSION" \
+            -p:GeneratePackageOnBuild=false \
             -o ./artifacts
 
       - name: Push to GitHub Packages

@@ -29,6 +29,13 @@ jobs:
       - name: Restore
         run: dotnet restore Identity.DynamoDb.sln
 
+      - name: Build
+        run: >
+          dotnet build src/Identity.DynamoDb/Identity.DynamoDb.csproj
+          -c Release
+          --no-restore
+          -p:GeneratePackageOnBuild=false
+
       - name: Pack
         shell: bash
         run: |
@@ -39,7 +46,10 @@ jobs:
 
           dotnet pack src/Identity.DynamoDb/Identity.DynamoDb.csproj \
             -c Release \
+            --no-build \
+            --no-restore \
             -p:PackageVersion="$VERSION" \
+            -p:GeneratePackageOnBuild=false \
             -o ./artifacts
 
       - name: Push to GitHub Packages
