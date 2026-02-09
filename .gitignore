@@ -1,0 +1,27 @@
+# Build artifacts
+bin/
+obj/
+
+# Test output
+TestResults/
+coverage/
+
+# NuGet artifacts
+*.nupkg
+*.snupkg
+
+# IDE / OS
+.vs/
+.vscode/
+.idea/
+.DS_Store
+
+# Terraform local state
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+
+# Local app settings
+appsettings.Development.json

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.DynamoDb", "src\Identity.DynamoDb\Identity.DynamoDb.csproj", "{7663A6EA-5F7E-A115-937B-31F1E4DFE657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.DynamoDb.Tests", "test\Identity.DynamoDb.Tests\Identity.DynamoDb.Tests.csproj", "{006CB401-F6A7-4602-A374-07E942784145}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7663A6EA-5F7E-A115-937B-31F1E4DFE657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7663A6EA-5F7E-A115-937B-31F1E4DFE657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7663A6EA-5F7E-A115-937B-31F1E4DFE657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7663A6EA-5F7E-A115-937B-31F1E4DFE657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006CB401-F6A7-4602-A374-07E942784145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006CB401-F6A7-4602-A374-07E942784145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006CB401-F6A7-4602-A374-07E942784145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006CB401-F6A7-4602-A374-07E942784145}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE46B449-3734-42A4-9493-EF14C638140E}
+	EndGlobalSection
+EndGlobal

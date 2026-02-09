@@ -1,0 +1,40 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and customize for your environment
+
+# Environment configuration
+environment = "dev"
+aws_region  = "us-west-2"
+
+# Table names (optional - defaults will be used if not specified)
+# users_table_name             = "my-app-users"
+# tokens_table_name            = "my-app-tokens"
+# temporary_tokens_table_name  = "my-app-temp-tokens"
+# user_roles_table_name        = "my-app-user-roles"
+
+# Billing mode: "PAY_PER_REQUEST" (recommended for dev) or "PROVISIONED" (recommended for prod)
+billing_mode = "PAY_PER_REQUEST"
+
+# Capacity settings (only used when billing_mode = "PROVISIONED")
+# users_read_capacity  = 5
+# users_write_capacity = 5
+
+# tokens_read_capacity  = 5
+# tokens_write_capacity = 5
+
+# temporary_tokens_read_capacity  = 3
+# temporary_tokens_write_capacity = 3
+
+# user_roles_read_capacity  = 3
+# user_roles_write_capacity = 3
+
+# Security settings
+enable_point_in_time_recovery = true
+enable_encryption             = true
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "UMS"
+  Component   = "Identity"
+  Owner       = "Development Team"
+}
