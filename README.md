@@ -114,3 +114,61 @@ For Terraform module usage see [`terraform/README.md`](terraform/README.md).
 
 - [Example Usage](EXAMPLE.md)
 - [License](LICENSE)
+
+## Private NuGet (GitHub Packages)
+
+### Publish from this repository
+
+The workflow file is already added:
+`/.github/workflows/publish-private-nuget.yml`
+
+It publishes package `UMS.Identity.DynamoDb` to:
+`https://nuget.pkg.github.com/dprutkevich/index.json`
+
+How to publish:
+
+1. Bump package version in `/src/Identity.DynamoDb/Identity.DynamoDb.csproj` (or publish by tag with version override).
+2. Push tag:
+   `git tag v1.3.1 && git push origin v1.3.1`
+3. Workflow will pack and push package to GitHub Packages.
+
+### Automatic prerelease from `main`
+
+Added workflow:
+`/.github/workflows/publish-private-nuget-prerelease.yml`
+
+On every push to `main` it publishes prerelease package with version:
+`<PackageVersion>-ci.<run_number>`
+
+Example:
+`1.3.0-ci.42`
+
+If the same commit already has a release tag `v*`, prerelease publish is skipped.
+
+### Use package in another private project
+
+1. Create GitHub PAT (classic) with scopes:
+- `read:packages`
+- `repo` (required for private repositories)
+
+2. Add source on your machine:
+
+```bash
+dotnet nuget add source "https://nuget.pkg.github.com/dprutkevich/index.json" \
+  --name "github-dprutkevich" \
+  --username "dprutkevich" \
+  --password "<YOUR_GITHUB_PAT>" \
+  --store-password-in-clear-text
+```
+
+3. Install package in any project:
+
+```bash
+dotnet add package UMS.Identity.DynamoDb --version 1.3.1 --source "github-dprutkevich"
+```
+
+Install prerelease package:
+
+```bash
+dotnet add package UMS.Identity.DynamoDb --version 1.3.0-ci.42 --source "github-dprutkevich"
+```

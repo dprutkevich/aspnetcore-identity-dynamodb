@@ -1,0 +1,72 @@
+name: Publish Private NuGet Prerelease
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: publish-private-nuget-prerelease-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish-prerelease:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Skip if commit is tagged for release
+        id: release-tag-check
+        shell: bash
+        run: |
+          TAGS=$(git tag --points-at "$GITHUB_SHA" | grep -E '^v' || true)
+          if [ -n "$TAGS" ]; then
+            echo "Commit already has release tag(s): $TAGS"
+            echo "skip_publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip_publish=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup .NET
+        if: steps.release-tag-check.outputs.skip_publish != 'true'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        if: steps.release-tag-check.outputs.skip_publish != 'true'
+        run: dotnet restore Identity.DynamoDb.sln
+
+      - name: Pack prerelease
+        if: steps.release-tag-check.outputs.skip_publish != 'true'
+        shell: bash
+        run: |
+          BASE_VERSION=$(grep -oPm1 '(?<=<PackageVersion>)[^<]+' src/Identity.DynamoDb/Identity.DynamoDb.csproj)
+          if [ -z "$BASE_VERSION" ]; then
+            echo "Failed to read <PackageVersion> from csproj"
+            exit 1
+          fi
+
+          VERSION="${BASE_VERSION}-ci.${GITHUB_RUN_NUMBER}"
+          echo "Packing prerelease version: ${VERSION}"
+
+          dotnet pack src/Identity.DynamoDb/Identity.DynamoDb.csproj \
+            -c Release \
+            -p:PackageVersion="$VERSION" \
+            -o ./artifacts
+
+      - name: Push to GitHub Packages
+        if: steps.release-tag-check.outputs.skip_publish != 'true'
+        run: |
+          dotnet nuget push "./artifacts/*.nupkg" \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key "${{ secrets.GITHUB_TOKEN }}" \
+            --skip-duplicate
